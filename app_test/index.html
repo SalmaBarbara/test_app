@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Scraping Tool</title>
+</head>
+<body>
+    <h1>Web Scraping Tool</h1>
+    <form id="scrape-form">
+        <label for="url">Page URL:</label>
+        <input type="text" id="url" name="url" required><br><br>
+        
+        <label for="date">Target Date (DD-MM-YYYY):</label>
+        <input type="text" id="date" name="date" required><br><br>
+        
+        <label for="time_tag">Time Tag:</label>
+        <input type="text" id="time_tag" name="time_tag" value="time"><br><br>
+        
+        <label for="time_class">Time Class:</label>
+        <input type="text" id="time_class" name="time_class"><br><br>
+        
+        <button type="submit">Scrape Titles</button>
+    </form>
+
+    <h2>Scraped Titles:</h2>
+    <ul id="titles-list"></ul>
+
+    <script>
+        document.getElementById('scrape-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const url = document.getElementById('url').value;
+            const date = document.getElementById('date').value;
+            const time_tag = document.getElementById('time_tag').value;
+            const time_class = document.getElementById('time_class').value;
+
+            const response = await fetch(`/scrape?url=${encodeURIComponent(url)}&date=${encodeURIComponent(date)}&time_tag=${encodeURIComponent(time_tag)}&time_class=${encodeURIComponent(time_class)}`);
+            const titles = await response.json();
+
+            const titlesList = document.getElementById('titles-list');
+            titlesList.innerHTML = '';
+            titles.forEach((title, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${index + 1}. ${title}`;
+                titlesList.appendChild(li);
+            });
+        });
+    </script>
+</body>
+</html>
