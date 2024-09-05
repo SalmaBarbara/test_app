@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -81,7 +81,9 @@ def track_most_recent_date(soup, time_tag, time_class):
         if most_recent_date is None or article_date > most_recent_date:
             most_recent_date = article_date
     return most_recent_date
-
+@app.route('/')
+def index():
+    return render_template('index.html')
 @app.route('/scrape', methods=['GET'])
 def scrape():
     page_url = request.args.get('url')
@@ -95,4 +97,4 @@ def scrape():
     return jsonify(titles)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='127.0.0.1', port=5000)
